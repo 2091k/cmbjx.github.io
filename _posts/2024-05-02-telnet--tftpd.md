@@ -1,3 +1,14 @@
+---
+layout: post
+title: "telnet--tftpd"
+author: "cmbjx"
+header-style: text
+tags:
+  - telnet
+  - tftpd
+---
+
+
 ## telnet 登录后进入目
 
 ```bash
