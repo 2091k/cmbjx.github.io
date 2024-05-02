@@ -4,6 +4,7 @@ title: "telnet  tftpd"
 author: "cmbjx"
 header-style: text
 header-img: "img/post-bg-os-metro.jpg"
+header-mask: 0.4
 tags:
   - telnet
   - tftpd
