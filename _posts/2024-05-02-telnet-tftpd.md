@@ -1,8 +1,9 @@
 ---
 layout: post
-title: "telnet--tftpd"
+title: "telnet  tftpd"
 author: "cmbjx"
 header-style: text
+header-img: "img/post-bg-web.jpg"
 tags:
   - telnet
   - tftpd
