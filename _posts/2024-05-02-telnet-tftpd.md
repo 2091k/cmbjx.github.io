@@ -3,7 +3,7 @@ layout: post
 title: "telnet  tftpd"
 author: "cmbjx"
 header-style: text
-header-img: "img/post-bg-web.jpg"
+header-img: "img/post-bg-os-metro.jpg"
 tags:
   - telnet
   - tftpd
