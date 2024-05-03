@@ -1,10 +1,12 @@
 ---
 layout: post
 title: "telnet  tftpd"
+description: "「生活不止眼前的苟且 还有诗与远方 ...」"
 author: "cmbjx"
 header-style: text
 header-img: "img/post-bg-os-metro.jpg"
 header-mask: 0.4
+multilingual: true
 tags:
   - telnet
   - tftpd
