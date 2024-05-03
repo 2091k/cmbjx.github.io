@@ -1,6 +1,6 @@
 ---
 layout: null
-author: "ifeng <https://t.me/HiaiFeng>"
+author: "Allen <https://t.me/cmbjx2>"
 ---
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -29,7 +29,7 @@ author: "ifeng <https://t.me/HiaiFeng>"
     {% endif %}
     {% endfor %}
     <url>
-        <loc>https://www.hicairo.com</loc>
+        <loc>http://2091k.cn</loc>
         <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
         <changefreq>always</changefreq>
         <priority>1.0</priority>
