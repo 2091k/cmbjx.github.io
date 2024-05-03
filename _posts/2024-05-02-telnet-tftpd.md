@@ -4,8 +4,8 @@ title: "telnet  tftpd"
 description: "「生活不止眼前的苟且 还有诗与远方 ...」"
 author: "cmbjx"
 header-style: text
-header-img: "img/post-bg-os-metro.jpg"
-header-mask: 0.4
+header-img: "img/bg-material.jpg"
+header-mask: 0.1
 multilingual: true
 tags:
   - telnet
