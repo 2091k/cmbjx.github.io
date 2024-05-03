@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "telnet  tftpd"
+title: "telnet后如何用tftpd下载文件"
 subtitle: "「生活不止眼前的苟且 还有诗与远方 ...」"
 author: "cmbjx"
 header-img: "img/bg-material.jpg"
