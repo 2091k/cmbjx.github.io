@@ -30,6 +30,11 @@ tftp -p -l mtd0 192.168.10.3
 tftp -g -l mtd0 192.168.10.3
 ```
 
+- [tftp下载链接][1]
+
+
+  [1]: https://wwi.lanzoup.com/i65rh1xe1rda
+
 
 {% if site.disqus_username %}
 <!-- disqus 评论框 start -->
@@ -55,7 +60,4 @@ tftp -g -l mtd0 192.168.10.3
 </script>
 <!-- disqus 公共JS代码 end -->
 {% endif %}
-- [tftp下载链接][1]
 
-
-  [1]: https://wwi.lanzoup.com/i65rh1xe1rda
