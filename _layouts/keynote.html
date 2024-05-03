@@ -109,6 +109,26 @@ layout: default
         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
 </script>
+
+<!--评论模块还有下面的script也是-->
+		<center>
+			<div class="newValine" id="vcomments"></div>
+		</center>
+		<script>
+			new Valine({
+				visitor: true,
+                                enableQQ: true,
+				el: '#vcomments',
+				avatar: 'mp',
+				appId: 'zMTEy7dEIxi2yanqngAaSX6Z-gzGzoHsz',
+				appKey: 'dK0MS3HBMsK1WSExZo7VaM1h',
+				placeholder: "前面qq号处填写qq可显示昵称和头像哦~~有什么问题欢迎评论区留言~么么哒"
+                                
+
+			}) 
+		</script>
+
+
 <!-- disqus 公共JS代码 end -->
 {% endif %}
 
