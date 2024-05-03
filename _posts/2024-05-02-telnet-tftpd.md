@@ -6,7 +6,6 @@ author: "cmbjx"
 header-style: text
 header-img: "img/bg-material.jpg"
 header-mask: 0.1
-multilingual: true
 tags:
   - telnet
   - tftpd
