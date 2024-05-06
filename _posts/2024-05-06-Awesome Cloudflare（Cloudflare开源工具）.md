@@ -18,7 +18,8 @@ tags:
 - 帮助但不限于独立开发者降低成本
 - 足够简单便捷
 
-欢迎提 pr 和 issues 更新。 部署或操作过程中有任何问题可以提issue或者私信咨询～
+## 精选Cloudflare开源工具
+<p>地址：<a href="https://github.com/zhuima/awesome-cloudflare" target="_blank" rel="nofollow noopener noreferrer">https://github.com/zhuima/awesome-cloudflare</a></p>
 
 ## Contents
 - [Contents](#contents)
