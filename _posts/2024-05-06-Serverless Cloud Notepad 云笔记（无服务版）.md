@@ -26,7 +26,7 @@ tags:
 
 - 访问 `/随便什么` 查看/编辑指定名称的笔记
 
-现在就试试！ [https://note.src.moe/example](https://note.src.moe/example)
+现在就试试！ [https://notepad.2091k.cn](notepad.2091k.cn)
 
 ## 💻 兼容性
 
@@ -70,6 +70,8 @@ npm version
 npm install -g wrangle
 ```
 ## 下载项目到电脑解压，进入目录cloud-notepad上传项目到cf
+
+- 项目地址[https://github.com/2091k/cloud-notepad](https://github.com/2091k/cloud-notepad)
 
 - 打开命令窗口 输入
 
