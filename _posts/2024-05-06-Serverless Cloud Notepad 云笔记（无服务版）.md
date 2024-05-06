@@ -54,6 +54,8 @@ $ npm run publish
 ## 完整教程
 
 - 安装node.js,安装Wrangler;
+  
+- nodejs下载地址https://nodejs.org/en/download
 
 - 在cloudflare账号里，Workers下面KV里创建一个命名空间，名称为（大写）NOTES，然后复制后面的ID备用；
 
