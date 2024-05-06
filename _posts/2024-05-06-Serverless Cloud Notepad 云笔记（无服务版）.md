@@ -1,3 +1,16 @@
+---
+layout: post
+title: "Serverless Cloud Notepad 云笔记（无服务版）"
+subtitle: ""
+author: "cmbjx"
+header-img: "img/bg-little-universe.jpg"
+header-mask: 0.4
+tags:
+  - Notepad
+  - 云笔记
+---
+
+
 ## ✨ 功能
 
 - ✏ 无需登录/注册, 即刻开始书写
@@ -36,20 +49,6 @@ $ npm run publish
 ```
 - 给你的域名添加一条CNAME解析记录，指向你刚刚创建的Work地址（如果你有自己的域名的话）
 
-
-
-
----
-layout: post
-title: "Serverless Cloud Notepad 云笔记（无服务版）"
-subtitle: ""
-author: "cmbjx"
-header-img: "img/bg-little-universe.jpg"
-header-mask: 0.4
-tags:
-  - Notepad
-  - 云笔记
----
 
 
 ## 完整教程
