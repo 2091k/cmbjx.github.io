@@ -1,3 +1,15 @@
+---
+layout: post
+title: "Awesome Cloudflare（Cloudflare开源工具)"
+subtitle: "「生活不止眼前的苟且 还有诗与远方 ...」"
+author: "cmbjx"
+header-img: "img/bg-little-universe.jpg"
+header-mask: 0.4
+tags:
+  - Cloudflare
+  - 开源工具
+---
+
 <h2><span id="Awesome_Cloudflare_shi_shen_me">Awesome Cloudflare是什么</span></h2><p>Awesome Cloudflare是一个精选的 Cloudflare 工具、开源项目、指南、博客和其他资源列表，为独立开发者早期摸索期提供一个省心省时的工具集，而且持续整理中，收录标准是简单便捷、帮助但不限于独立开发者降低成本、提升开发效率等等，工具设计到图床、邮箱、博客、短链、网站分析、加速、文件分享等等方面。</p><p dir="auto">被称为赛博菩萨的 Cloudflare 提供内容交付网络 （CDN） 服务、DDoS 缓解、互联网安全和分布式域名服务器 （DNS） 服务，位于访问者和 Cloudflare 用户的托管提供商之间，充当网站的反向代理。</p><p dir="auto"><strong>收录标准：</strong></p><ul dir="auto">
 <li>帮助但不限于独立开发者提升开发效率</li>
 <li>帮助但不限于独立开发者降低成本</li>
