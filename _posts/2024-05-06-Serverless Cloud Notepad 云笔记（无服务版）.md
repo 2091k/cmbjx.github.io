@@ -78,9 +78,16 @@ npm install -g wrangle
 - 浏览器弹出登录，登录后就可以
 
 ```SH
+wrangler login
 npm -i
 npm run publish
 ```
+- 如果上面的命令上传失败用下面的命令即可
+
+```sh
+wrangler publish
+```
+
 - 然后再CF里就能看到新的Workers项目了，可以添加自己的域名
 
   [1]: https://img.2091k.cn/file/eba133810db421accdfa0.png
