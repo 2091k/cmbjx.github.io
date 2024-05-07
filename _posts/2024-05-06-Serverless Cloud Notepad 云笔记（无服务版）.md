@@ -77,7 +77,7 @@ npm install -g wrangle
 
 - 浏览器弹出登录，登录后就可以
 
-```SH
+```sh
 wrangler login
 npm -i
 npm run publish
