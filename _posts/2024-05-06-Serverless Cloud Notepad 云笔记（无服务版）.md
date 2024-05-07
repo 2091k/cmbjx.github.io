@@ -88,6 +88,16 @@ npm run publish
 wrangler publish
 ```
 
+- 如果有报错 先运行
+
+```sh
+npm install
+
+新的上传命令
+
+wrangler deploy
+```
+
 - 然后再CF里就能看到新的Workers项目了，可以添加自己的域名
 
   [1]: https://img.2091k.cn/file/eba133810db421accdfa0.png
