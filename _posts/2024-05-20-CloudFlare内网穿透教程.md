@@ -18,7 +18,10 @@ https://github.com/cloudflare/cloudflared/releases
 32位arm平台选择【cloudflared-linux-arm】
 64位arm平台选择【cloudflared-linux-arm64】
 
-下载好命名放到cloudflared放到/usr/bin/
+### 我打包了arm和arm64位的，可供下载
+### 蓝奏下载地址[cloudflared.zip](https://wwi.lanzoup.com/i5JQ61z8plwd)
+
+下载好命名cloudflared放到放到/usr/bin/
 
 ## 给权限和登陆
 
