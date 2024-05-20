@@ -13,7 +13,7 @@ tags:
 
 ## 下载程序到盒子里：
 
-https://github.com/cloudflare/cloudflared/releases
+[https://github.com/cloudflare/cloudflared/releases](https://github.com/cloudflare/cloudflared/releases)
 自己选择对应版本下载，
 32位arm平台选择【cloudflared-linux-arm】
 64位arm平台选择【cloudflared-linux-arm64】
