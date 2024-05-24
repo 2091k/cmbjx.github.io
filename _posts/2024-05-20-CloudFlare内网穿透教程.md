@@ -42,16 +42,15 @@ cloudflared tunnel create cloud
 
 ## 配置文件config.yml到/etc/cloudflared/
 
-```
-tunnel: 275fe7bb-5948-45a0-bda7-30da7d154ddf
-credentials-file: /root/.cloudflared/275fe7bb-5948-45a0-bda7-30da7d154ddf.json
 
-ingress:
-  - hostname: cloud.2091k.cn
-    service: http://127.0.0.1
-  - service: http_status:404
+    tunnel: 275fe7bb-5948-45a0-bda7-30da7d154ddf
+    credentials-file: /root/.cloudflared/275fe7bb-5948-45a0-bda7-30da7d154ddf.json
 
-```
+    ingress:
+      - hostname: cloud.2091k.cn
+        service: http://127.0.0.1
+      - service: http_status:404
+
 
  #这个ID在/root/.cloudflared里
 
