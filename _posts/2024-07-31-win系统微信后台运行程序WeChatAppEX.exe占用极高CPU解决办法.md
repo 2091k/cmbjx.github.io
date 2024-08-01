@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "win系统微信后台运行程序WeChatAppEX.exe占用极高CPU解决办法"
+title: "win系统WeChat后台运行程序WeChatAppEX.exe占用极高CPU解决办法"
 subtitle: ""
 author: "cmbjx"
 header-img: "img/tu/wex.png"
 header-mask: 0.4
 tags:
   - Win
-  - 微信
+  - 微信WeChat
 ---
 
 ### WeChatAppEx.exe进程侵占CPU解决办法：
