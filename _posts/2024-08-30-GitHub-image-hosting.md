@@ -1,4 +1,18 @@
-# [GitHub-image-hosting](https://github.com/2091k/GitHub-image-hosting)
+---
+layout: post
+title: "图床GitHub-image-hosting"
+subtitle: ""
+author: "cmbjx"
+header-img: "img/tu/home-blue.jpg"
+header-mask: 0.4
+tags:
+  - GitHub
+  - workers
+---
+
+
+
+# 图床[GitHub-image-hosting](https://github.com/2091k/GitHub-image-hosting)
 ####  这是一个[CloudFlare workers](https://github.com/2091k/GitHub-image-hosting)图床项目
 用于网页端直接上传图片到GitHub的项目仓库中
 
