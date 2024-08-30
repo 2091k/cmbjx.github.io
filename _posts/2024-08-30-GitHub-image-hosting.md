@@ -3,7 +3,7 @@ layout: post
 title: "图床GitHub-image-hosting"
 subtitle: ""
 author: "cmbjx"
-header-img: ""
+header-img: "home-blue.jpg"
 header-mask: 0.4
 tags:
   - GitHub
