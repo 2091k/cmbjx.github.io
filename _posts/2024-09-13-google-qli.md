@@ -20,8 +20,17 @@ tags:
 
 ### 把下面文件夹删除即可，我的竟然占用了好几个GB
 
-```SH
-C:\Users\Administrator\AppData\Local\Google\Chrome\User Data\Default\Service Worker\CacheStorage
+```bat
 
-C:\Users\Administrator\AppData\Local\Google\Chrome\User Data\Default\IndexedDB
+C:\Users\Administrator\AppData\Local\env-kit
+
+C:\Users\Administrator\AppData\Local\Google\Chrome\User Data\Default\Cache\*.*
+
+C:\Users\Administrator\AppData\Local\Google\Chrome\User Data\Default\Code Cache\*.*
+
+C:\Users\Administrator\AppData\Local\Google\Chrome\User Data\Default\IndexedDB\*.*
+
+C:\Users\Administrator\AppData\Local\Google\Chrome\User Data\Default\Service Worker\CacheStorage\*.*
+
+C:\Users\Administrator\AppData\Local\Microsoft\deg\*.*
 ```
