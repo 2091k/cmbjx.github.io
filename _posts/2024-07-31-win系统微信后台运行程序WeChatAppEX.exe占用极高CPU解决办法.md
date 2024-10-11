@@ -24,7 +24,7 @@ C:\Users\Administrator\AppData\Roaming\Tencent\WeChat\XPlugin\Plugins\RadiumWMPF
 RadiumWMPF目录删除
 
 新建一个RadiumWMPF文件夹，设置属性`拒绝`
-![1](https://img.2091k.cn/file/4210dbd3952ce49296dc0.jpg)
+![1](https://tgimg.2091k.cn/file/4210dbd3952ce49296dc0.jpg)
 
 然后重新打开微信，就会发现CPU占用变少了，
 
