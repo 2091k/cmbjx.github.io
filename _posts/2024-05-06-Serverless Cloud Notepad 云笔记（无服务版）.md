@@ -100,4 +100,4 @@ wrangler deploy
 
 - 然后再CF里就能看到新的Workers项目了，可以添加自己的域名
 
-  [1]: https://img.2091k.cn/file/eba133810db421accdfa0.png
+  [1]: https://tgimg.2091k.cn/file/eba133810db421accdfa0.png
