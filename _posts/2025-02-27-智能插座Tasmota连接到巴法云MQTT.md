@@ -13,7 +13,7 @@ tags:
 ## 1. 在你的NAS服务器上安装好MQTT服务器后
 
 ### 说明：因为Tasmota的MQTT无法直接连到巴法云，所以，使用海纳思服务器中转传递消息
-
+- Tasmota的mqtt里主题写你的巴法云MQTT主题
 - SH代码
 
 ```sh
