@@ -97,14 +97,26 @@ chmod +x bfy.sh
 ```sh
 ./bfy.sh
 ```
-- 设置开机启动 `vi /etc/rc.local`
+- 设置开机启动 `vi /etc/rc.d/rc.local`
 ```sh
+#!/bin/bash
+# THIS FILE IS ADDED FOR COMPATIBILITY PURPOSES
+#
+# It is highly advisable to create own systemd services or udev rules
+# to run scripts during boot instead of using this file.
+#
+# In contrast to previous versions due to parallel execution during boot
+# this script will NOT be run after all other services.
+#
+# Please note that you must run 'chmod +x /etc/rc.d/rc.local' to ensure
+# that this script will be executed during boot.
+ 
 nohup ./bfy.sh &
 ```
 
 - 加权限
 ```sh
-chmod +x /etc/rc.local
+chmod +x /etc/rc.d/rc.local
 ```
 
 ## 好了，现在在巴法云平台就可以控制智能设备的开关了
