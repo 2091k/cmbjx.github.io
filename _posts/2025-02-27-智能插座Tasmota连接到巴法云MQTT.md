@@ -121,3 +121,10 @@ chmod +x /etc/rc.local
 ```
 
 ## 好了，现在在巴法云平台看到一个订阅设备在线就说明成功了，就可以控制智能设备的开关了
+
+
+下面是
+代码记录，可以忽略：
+mosquitto_pub -h 505x47431sx.qicp.vip -p 1883 -t "cmnd/allen001/POWER" -i "server_client_01" -m "on"
+
+mosquitto_pub -h 505x47431sx.qicp.vip -p 1883 -t "cmnd/allen001/POWER" -i "server_client_01" -m "off"
