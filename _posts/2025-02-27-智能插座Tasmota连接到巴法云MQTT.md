@@ -98,6 +98,7 @@ chmod +x bfy.sh
 ./bfy.sh
 ```
 - 设置开机启动 `vi /etc/rc.d/rc.local`
+  
 ```sh
 #!/bin/bash
 # THIS FILE IS ADDED FOR COMPATIBILITY PURPOSES
