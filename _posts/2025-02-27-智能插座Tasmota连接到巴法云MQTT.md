@@ -6,8 +6,8 @@ author: "cmbjx"
 header-img: "img/tu/home-blue.jpg"
 header-mask: 0.4
 tags:
-  - Alist
-  - PDF
+  - Tasmota
+  - mqtt
 ---
 
 ## 1. 在你的NAS服务器上安装好MQTT服务器后
