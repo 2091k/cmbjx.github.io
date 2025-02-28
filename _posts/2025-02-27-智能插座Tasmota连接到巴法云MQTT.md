@@ -124,7 +124,9 @@ chmod +x /etc/rc.local
 
 
 下面是
-代码记录，可以忽略：
+代码记录，可以忽略:
+```SH
 mosquitto_pub -h 505x47431sx.qicp.vip -p 1883 -t "cmnd/allen001/POWER" -i "server_client_01" -m "on"
 
 mosquitto_pub -h 505x47431sx.qicp.vip -p 1883 -t "cmnd/allen001/POWER" -i "server_client_01" -m "off"
+```
