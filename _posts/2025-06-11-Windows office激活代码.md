@@ -30,3 +30,13 @@ irm https://get.activated.win | iex
 ```
 
 4.跳出对话框，输入1
+
+---
+
+#### 如果你的系统是Windows7系统也不必担心，我把代码打包好，你解压运行就行了，已加入中文版本
+下载地址：
+
+[office+win激活.zip](https://wwqo.lanzouo.com/ifIOf2xpz1kh)
+
+项目开源地址：[https://github.com/nminhducit/KMS_VL_ALL_AIO](https://github.com/nminhducit/KMS_VL_ALL_AIO)
+
