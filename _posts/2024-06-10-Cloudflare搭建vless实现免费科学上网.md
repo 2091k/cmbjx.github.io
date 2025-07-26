@@ -24,6 +24,9 @@ tags:
 ![请输入图片描述][6]
 ### 6.想要延迟低一些，网速快点可以自己优选IP[在安卓设备使用 Termux 进行优选 CloudFlare IP][7]
 
+### 7.配置截图
+![image](https://jasuimg.2091k.cn/2091k/image/main/001/20250726094128_xtx3pc81gq.jpg)
+
 
 https://github.com/eujc/v2ray/releases/tag/worker-vless
 
