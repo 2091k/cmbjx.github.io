@@ -62,6 +62,8 @@ pyinstaller --onefile 1.py
 打包完成后，会在脚本所在目录生成 dist 文件夹，里面的 1.exe 就是可执行文件（可独立运行，无需依赖虚拟环境）。
 
 
+py图形界面代码是tkinter
+
 
 
 
