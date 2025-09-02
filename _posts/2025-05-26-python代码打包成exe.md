@@ -31,4 +31,37 @@ pyinstaller --onefile --windowed --icon=logo.ico --add-data "logo.ico;." app.py
 生成的exe文件会出现在 dist/ 目录
 
 双击运行测试功能是否正常
+---
+---
+
+#### 虚拟环境
+
+1.建立虚拟环境 激活环境
+
+```py
+py -m venv myvenv
+myvenv\Scripts\activate.bat
+```
+2. 安装 PyInstaller（如果未安装）
+在激活的虚拟环境中安装 PyInstaller：
+```py
+pip install pyinstaller
+```
+3. 执行打包命令
+进入你的 Python 脚本（1.py）所在目录，执行打包命令（根据程序类型选择）：
+
+如果是 GUI 程序（无控制台窗口）：
+```py
+pyinstaller --onefile --windowed 1.py
+```
+如果是命令行程序（需要控制台）：
+```py
+pyinstaller --onefile 1.py
+```
+4. 打包结果
+打包完成后，会在脚本所在目录生成 dist 文件夹，里面的 1.exe 就是可执行文件（可独立运行，无需依赖虚拟环境）。
+
+
+
+
 
