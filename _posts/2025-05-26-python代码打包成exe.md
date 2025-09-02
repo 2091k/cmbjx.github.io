@@ -42,12 +42,12 @@ pyinstaller --onefile --windowed --icon=logo.ico --add-data "logo.ico;." app.py
 py -m venv myvenv
 myvenv\Scripts\activate.bat
 ```
-2. 安装 PyInstaller（如果未安装）
+2.安装 PyInstaller（如果未安装）
 在激活的虚拟环境中安装 PyInstaller：
 ```py
 pip install pyinstaller
 ```
-3. 执行打包命令
+3.执行打包命令
 进入你的 Python 脚本（1.py）所在目录，执行打包命令（根据程序类型选择）：
 
 如果是 GUI 程序（无控制台窗口）：
