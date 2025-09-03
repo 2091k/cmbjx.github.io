@@ -63,6 +63,30 @@ pyinstaller --onefile 1.py
 
 
 py图形界面代码是tkinter
+#### 代码拓展
+
+#### exe打开窗口添加logo通用代码
+
+```py
+import sys  # 1. 导入sys模块，用于获取临时目录
+import os   # 2. 导入os模块，用于拼接路径
+
+# 添加到其他self后面
+self.icon_path = self.get_icon_path("logo.ico")  # 替换为你的图标文件名
+self.root.iconbitmap(default=self.icon_path)  # 用动态路径设置窗口图标
+
+
+
+    # self结束后 添加“获取图标路径”的方法
+    def get_icon_path(self, icon_filename):
+        """动态获取图标路径：单文件模式用临时目录，文件夹模式用当前目录"""
+        if hasattr(sys, "_MEIPASS"):
+            # 单文件模式：图标在临时目录（sys._MEIPASS指向临时目录）
+            return os.path.join(sys._MEIPASS, icon_filename)
+        else:
+            # 文件夹模式/直接运行代码：图标在当前目录
+            return os.path.join(os.path.dirname(__file__), icon_filename)
+```
 
 
 
