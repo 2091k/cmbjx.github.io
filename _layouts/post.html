@@ -2,6 +2,9 @@
 layout: default
 ---
 
+<!-- 添加这行代码：禁止发送 Referer，解决图片防盗链 -->
+<meta name="referrer" content="no-referrer">
+
 <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
 <!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
