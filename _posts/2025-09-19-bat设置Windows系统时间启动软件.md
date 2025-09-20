@@ -16,62 +16,117 @@ tags:
 
 ```bat
 @echo off
-:: 检查是否以管理员身份运行
-fltmc >nul 2>&1 || (echo 请以管理员身份运行此脚本 && pause && exit /b 1)
+setlocal enabledelayedexpansion
 
-:: 保存当前时间（用于设置日期后恢复原时间）
-for /f "tokens=1-2 delims=:" %%a in ('time /t') do set current_time=%%a:%%b
-
-:: 尝试设置日期为2025年1月1日
-echo 正在设置系统日期为2025年1月1日...
-set "success=0"
-
-:: 尝试多种日期格式
-date 2025-01-01 >nul 2>&1 && set success=1
-if %success% equ 0 (
-    date 20250101 >nul 2>&1 && set success=1
-)
-if %success% equ 0 (
-    date 2025年01月01日 >nul 2>&1 && set success=1
-)
-
-:: 如果日期设置失败，提示用户
-if %success% equ 0 (
-    echo 日期设置失败，请手动设置日期为2025年1月1日
+:: 检查管理员权限
+echo.
+echo ========================================
+echo           权限检查中...
+echo ========================================
+fltmc >nul 2>&1 || (
+    echo [错误] 请以管理员身份运行此脚本！
     pause
-    exit /b 1
+    goto End
 )
+echo [成功] 已获取管理员权限
+echo.
 
-:: 恢复原时间（因为设置日期可能会改变时间）
-time %current_time% >nul 2>&1
+:: 保存当前完整的日期和时间
+echo ========================================
+echo           保存当前系统时间...
+echo ========================================
+for /f "delims=" %%a in ('powershell -command "(Get-Date).ToString('yyyy-MM-dd')"') do set "original_date=%%a"
+for /f "delims=" %%a in ('powershell -command "(Get-Date).ToString('HH:mm:ss')"') do set "original_time=%%a"
+echo 当前日期：!original_date!
+echo 当前时间：!original_time!
+echo.
 
-:: 进入指定目录
-echo 正在进入程序目录...
-cd /d "F:\移动\001\666"
-if %errorlevel% neq 0 (
-    echo 无法进入程序目录，请检查路径是否正确
-    pause
-    exit /b 1
-)
-
-:: 启动程序并等待其关闭
-echo 正在启动软件...
-start /wait "你的软件名称" "软件.exe"
-
-:: 程序关闭后，同步系统时间为北京时间
-echo 程序已关闭，正在同步系统时间为北京时间...
-w32tm /config /syncfromflags:manual /manualpeerlist:"time.windows.com,0x8 ntp.aliyun.com,0x8" >nul 2>&1
-w32tm /config /update >nul 2>&1
-w32tm /resync /force >nul 2>&1
-
-:: 检查时间同步是否成功
-if %errorlevel% equ 0 (
-    echo 系统时间已成功同步为北京时间
+:: 设置日期为2025年1月1日
+echo ========================================
+echo           调整系统日期...
+echo ========================================
+powershell -command "$newDate = [DateTime]::Parse('%original_time%'); Set-Date -Date (New-Object DateTime(2025, 1, 1, $newDate.Hour, $newDate.Minute, $newDate.Second))" >nul 2>&1
+if !errorlevel! equ 0 (
+    echo [成功] 日期已设置为: 2025-01-01
+    echo        时间保持不变: !original_time!
 ) else (
-    echo 时间同步失败，建议手动同步时间
+    echo [错误] 日期设置失败，请手动设置为2025年1月1日
+    pause
+    goto End
 )
+echo.
 
-pause
+:: 进入脚本目录
+echo ========================================
+echo           切换工作目录...
+echo ========================================
+cd /d %~dp0 || (
+    echo [错误] 无法进入脚本目录
+    pause
+    goto End
+)
+echo 当前工作目录: %cd%
+echo.
+
+:: 启动程序
+echo ========================================
+echo           启动应用程序...
+echo ========================================
+if not exist "你的软件名称.exe" (
+    echo [错误] 未找到程序文件：你的软件名称.exe
+    pause
+    goto End
+)
+echo 正在启动应用程序...
+start /wait "你的软件名称" "你的软件名称.exe"
+echo 应用程序已关闭
+echo.
+
+:: 恢复原始日期
+echo ========================================
+echo           恢复系统时间...
+echo ========================================
+powershell -command "$time = [DateTime]::Parse('%original_time%'); $date = [DateTime]::Parse('%original_date%'); Set-Date -Date (New-Object DateTime($date.Year, $date.Month, $date.Day, $time.Hour, $time.Minute, $time.Second))" >nul 2>&1
+if !errorlevel! equ 0 (
+    echo [成功] 日期已恢复为: !original_date!
+    echo        时间已恢复为: !original_time!
+) else (
+    echo [警告] 时间恢复失败，尝试备用方案...
+    powershell -command "Set-Date -Date '%original_date%T%original_time%'" >nul 2>&1 && (
+        echo [成功] 日期已恢复为: !original_date!
+        echo        时间已恢复为: !original_time!
+    ) || (
+        echo [错误] 自动恢复失败，请手动设置系统时间
+        echo.
+        echo 当前系统日期: 
+        date
+        echo 当前系统时间:
+        time
+        echo.
+        echo 请手动恢复日期为: !original_date!
+        echo 请手动恢复时间为: !original_time!
+    )
+)
+echo.
+
+:: 执行时间同步
+echo ========================================
+echo           同步网络时间...
+echo ========================================
+echo 正在与时间服务器同步...
+w32tm /resync /force
+echo.
+echo [完成] 时间同步操作已完成
+echo.
+
+:End
+echo ========================================
+echo           操作执行完毕
+echo ========================================
+echo 按任意键退出...
+pause >nul
+endlocal
 
 ```
+
 
