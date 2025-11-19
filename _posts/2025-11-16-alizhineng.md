@@ -44,7 +44,7 @@ TX0  |  RX
 
 ![image](https://jasuimg.2091k.cn/2091k/image/main/001/20251116221333_0lhgo5e1rc.jpg)
 
-刷机工具与固件：[https://wwqo.lanzouo.com/iGTSG3bav4ej](https://wwqo.lanzouo.com/iGTSG3bav4ej)
+刷机工具与固件：密码：6666[https://wwqo.lanzouo.com/b02sg6ywpa](https://wwqo.lanzouo.com/b02sg6ywpa)
 > 为防止滥用，固件加入了验证码效验功能，刷入后需要输入对应验证码方可正常远程控制，否则只能手动控制
 
 刷机完成联网成功电脑后登录巴法云后台输入验证码
