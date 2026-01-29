@@ -5,6 +5,7 @@ subtitle: ""
 author: "晴天，微冷"
 header-img: "img/tu/home-blue.jpg"
 header-mask: 0.4
+category: 技术
 tags:
 - BarTender
 - Excel
