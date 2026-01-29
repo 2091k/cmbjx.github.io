@@ -5,69 +5,6 @@ layout: default
 <!-- 添加这行代码：禁止发送 Referer，解决图片防盗链 -->
 <meta name="referrer" content="no-referrer">
 
-<!-- 👇 核心：隐藏主题自带的所有复制按钮 + 自定义按钮样式 -->
-<style>
-/* ========== 第一步：彻底隐藏主题自带的复制按钮 ========== */
-/* 匹配主题所有可能的复制按钮类名/标签（根据常见主题写法覆盖） */
-pre [class*="copy-btn"], 
-pre [class*="code-copy"], 
-pre [id*="copy"],
-pre > button:not(.custom-copy-btn), /* 非我们的按钮全部隐藏 */
-pre > a[class*="copy"],
-pre > div[class*="copy"] {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-}
-
-/* ========== 第二步：自定义按钮样式（浮在右上角，不随滚动） ========== */
-/* 代码块容器：确保按钮定位基准，滚动时按钮固定在代码块内 */
-pre {
-  position: relative; 
-  overflow: auto !important; /* 代码块滚动时，按钮仍在右上角 */
-  margin: 1.5rem 0;
-}
-
-/* 自定义复制按钮：浮在代码块右上角，不随滚动条移动 */
-.custom-copy-btn {
-  position: sticky !important; /* 关键：粘性定位，固定在代码块右上角 */
-  top: 8px;
-  right: 8px;
-  padding: 4px 8px;
-  background-color: #444 !important;
-  color: #fff !important;
-  border: none !important;
-  border-radius: 3px !important;
-  font-size: 12px !important;
-  cursor: pointer !important;
-  z-index: 9999 !important; /* 最高层级，不被遮挡 */
-  opacity: 0.9 !important;
-  /* 强制覆盖主题样式，避免被继承 */
-  float: none !important;
-  clear: none !important;
-  box-shadow: none !important;
-}
-
-.custom-copy-btn:hover {
-  opacity: 1 !important;
-  background-color: #2788e8 !important;
-}
-
-/* 复制成功提示：和按钮同位置 */
-.custom-copy-tip {
-  position: sticky !important;
-  top: 8px;
-  right: 8px;
-  padding: 4px 8px;
-  background-color: #28a745 !important;
-  color: #fff !important;
-  border-radius: 3px !important;
-  font-size: 12px !important;
-  display: none !important;
-  z-index: 9999 !important;
-}
-</style>
-
 <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
 <!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
@@ -182,6 +119,222 @@ pre {
     </div>
 </article>
 
+<!-- 代码块复制按钮样式 -->
+<style>
+.code-block-wrapper {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.code-block-wrapper:hover .copy-code-btn,
+.copy-code-btn:focus {
+  opacity: 1;
+}
+
+.copy-code-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 5px 12px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease, background 0.3s ease;
+  z-index: 10;
+  outline: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.copy-code-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.copy-code-btn.copied {
+  background: #28a745;
+  opacity: 1;
+}
+
+pre {
+  position: relative;
+  padding-top: 2.5em !important;
+  overflow: auto;
+}
+
+/* 确保代码块容器有正确的位置上下文 */
+.highlight {
+  position: relative;
+}
+
+/* 为所有可能的代码容器添加样式 */
+pre[class*="language-"],
+figure.highlight,
+div.highlighter-rouge,
+div.highlight {
+  position: relative;
+}
+</style>
+
+<!-- 代码块复制按钮功能脚本 -->
+<script>
+(function() {
+  // 等待DOM加载完成
+  function initCopyButtons() {
+    // 查找所有的代码块 - 支持多种常见的代码块结构
+    const codeSelectors = [
+      'pre',
+      '.highlight pre',
+      'figure.highlight pre',
+      '.highlighter-rouge pre',
+      'div.highlight pre'
+    ];
+    
+    let allPreElements = [];
+    codeSelectors.forEach(selector => {
+      const elements = document.querySelectorAll(selector);
+      elements.forEach(el => {
+        // 确保不会重复添加按钮
+        if (!el.querySelector('.copy-code-btn') && !allPreElements.includes(el)) {
+          allPreElements.push(el);
+        }
+      });
+    });
+    
+    // 如果没有找到任何代码块，尝试更通用的选择器
+    if (allPreElements.length === 0) {
+      const allPre = document.querySelectorAll('pre');
+      allPre.forEach(pre => {
+        if (!pre.querySelector('.copy-code-btn')) {
+          allPreElements.push(pre);
+        }
+      });
+    }
+    
+    // 为每个代码块添加复制按钮
+    allPreElements.forEach(pre => {
+      // 创建按钮
+      const button = document.createElement('button');
+      button.className = 'copy-code-btn';
+      button.textContent = '复制';
+      button.type = 'button';
+      button.title = '复制代码';
+      
+      // 如果pre没有包装容器，创建一个
+      let wrapper = pre.parentElement;
+      const isHighlight = wrapper.classList && 
+        (wrapper.classList.contains('highlight') || 
+         wrapper.classList.contains('highlighter-rouge'));
+      
+      if (!isHighlight && !wrapper.classList.contains('code-block-wrapper')) {
+        wrapper = document.createElement('div');
+        wrapper.className = 'code-block-wrapper';
+        pre.parentNode.insertBefore(wrapper, pre);
+        wrapper.appendChild(pre);
+      } else {
+        wrapper.classList.add('code-block-wrapper');
+      }
+      
+      // 添加按钮到代码块
+      pre.appendChild(button);
+      
+      // 点击事件处理
+      button.addEventListener('click', async function() {
+        const self = this;
+        try {
+          // 获取代码文本
+          let codeText = '';
+          const codeElement = pre.querySelector('code');
+          
+          if (codeElement) {
+            codeText = codeElement.textContent || codeElement.innerText;
+          } else {
+            // 移除按钮文本
+            const temp = pre.cloneNode(true);
+            const btn = temp.querySelector('.copy-code-btn');
+            if (btn) btn.remove();
+            codeText = temp.textContent || temp.innerText;
+          }
+          
+          // 清理文本
+          codeText = codeText.replace(/^\s+|\s+$/g, '');
+          
+          // 尝试使用现代 Clipboard API
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(codeText);
+            showCopyFeedback(self, true);
+          } else {
+            // 降级方案：使用 textarea
+            const textarea = document.createElement('textarea');
+            textarea.value = codeText;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+              const successful = document.execCommand('copy');
+              showCopyFeedback(self, successful);
+            } catch (err) {
+              console.error('复制失败:', err);
+              showCopyFeedback(self, false);
+            }
+            
+            document.body.removeChild(textarea);
+          }
+        } catch (err) {
+          console.error('复制失败:', err);
+          showCopyFeedback(self, false);
+        }
+      });
+      
+      // 显示复制反馈
+      function showCopyFeedback(button, success) {
+        const originalText = button.textContent;
+        if (success) {
+          button.textContent = '已复制!';
+          button.classList.add('copied');
+        } else {
+          button.textContent = '复制失败';
+        }
+        
+        // 2秒后恢复
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.classList.remove('copied');
+        }, 2000);
+      }
+    });
+  }
+  
+  // 初始化复制按钮
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCopyButtons);
+  } else {
+    initCopyButtons();
+  }
+  
+  // 监听动态内容变化（如通过AJAX加载的内容）
+  if (typeof MutationObserver !== 'undefined') {
+    const observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.addedNodes.length) {
+          // 延迟执行以避免重复添加
+          setTimeout(initCopyButtons, 100);
+        }
+      });
+    });
+    
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+  }
+})();
+</script>
+
 <!-- add support for mathjax by voleking-->
 {% if page.mathjax %}
   {% include mathjax_support.html %}
@@ -221,84 +374,6 @@ pre {
 <!-- disqus 公共JS代码 end -->
 {% endif %}
 
-<!-- 👇 复制按钮核心逻辑：只创建一个按钮，删除多余按钮 -->
-<script>
-// 页面加载完成后执行
-document.addEventListener('DOMContentLoaded', function() {
-    // ========== 第一步：删除主题自带的所有复制按钮 ==========
-    const themeCopyBtns = document.querySelectorAll(
-        'pre [class*="copy-btn"], pre [class*="code-copy"], pre [id*="copy"], pre > button:not(.custom-copy-btn), pre > a[class*="copy"], pre > div[class*="copy"]'
-    );
-    themeCopyBtns.forEach(btn => btn.remove());
-
-    // ========== 第二步：给每个代码块添加唯一的自定义按钮 ==========
-    const codeBlocks = document.querySelectorAll('pre');
-    codeBlocks.forEach(block => {
-        // 跳过已有自定义按钮的代码块（避免重复）
-        if (block.querySelector('.custom-copy-btn')) return;
-
-        // 1. 创建复制按钮
-        const copyBtn = document.createElement('button');
-        copyBtn.className = 'custom-copy-btn';
-        copyBtn.innerText = '复制代码';
-
-        // 2. 创建复制成功提示
-        const copyTip = document.createElement('div');
-        copyTip.className = 'custom-copy-tip';
-        copyTip.innerText = '复制成功';
-
-        // 3. 添加到代码块（只加一次）
-        block.appendChild(copyBtn);
-        block.appendChild(copyTip);
-
-        // 4. 绑定复制事件（只复制纯代码）
-        copyBtn.addEventListener('click', function() {
-            let codeText = '';
-            const codeEl = block.querySelector('code');
-            
-            if (codeEl) {
-                // 优先取code标签内的纯文本
-                codeText = codeEl.textContent || codeEl.innerText;
-                // 移除行号（匹配 1 2 3... 开头的行）
-                codeText = codeText.replace(/^\s*\d+\s+/gm, '').trim();
-            } else {
-                codeText = block.textContent.replace(/^\s*\d+\s+/gm, '').trim();
-            }
-
-            // 复制到剪贴板
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(codeText)
-                    .then(() => {
-                        copyTip.style.display = 'block';
-                        setTimeout(() => copyTip.style.display = 'none', 2000);
-                    })
-                    .catch(() => alert('复制失败，请手动复制'));
-            } else {
-                // 兼容旧浏览器
-                const textArea = document.createElement('textarea');
-                textArea.value = codeText;
-                textArea.style.position = 'fixed';
-                textArea.style.top = '-9999px';
-                document.body.appendChild(textArea);
-                textArea.select();
-                try {
-                    document.execCommand('copy');
-                    copyTip.style.display = 'block';
-                    setTimeout(() => copyTip.style.display = 'none', 2000);
-                } catch (err) {
-                    alert('复制失败，请手动复制');
-                }
-                document.body.removeChild(textArea);
-            }
-        });
-    });
-
-    // ========== 第三步：再次检查，确保无漏网的多余按钮 ==========
-    setTimeout(() => {
-        document.querySelectorAll('pre > button:not(.custom-copy-btn)').forEach(btn => btn.remove());
-    }, 1000);
-});
-</script>
 
 {% if site.anchorjs %}
 <!-- async load function -->
