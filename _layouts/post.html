@@ -5,6 +5,23 @@ layout: default
 <!-- 添加这行代码：禁止发送 Referer，解决图片防盗链 -->
 <meta name="referrer" content="no-referrer">
 
+<!-- 👇 新增：复制按钮的CSS样式（放在meta下方） -->
+<style>
+pre {position: relative; margin: 1.5rem 0; border-radius: 6px; overflow: hidden;}
+.copy-code-btn {
+  position: absolute; top: 8px; right: 8px;
+  padding: 5px 10px; background: #555; color: #fff;
+  border: none; border-radius: 4px; font-size: 12px;
+  cursor: pointer; opacity: 0.8; transition: all 0.2s ease; z-index: 10;
+}
+.copy-code-btn:hover {opacity: 1; background: #2788e8;}
+.copy-success-tip {
+  position: absolute; top: 8px; right: 8px;
+  padding: 5px 10px; background: #28a745; color: #fff;
+  border-radius: 4px; font-size: 12px; display: none; z-index: 10;
+}
+</style>
+
 <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
 <!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
@@ -158,6 +175,65 @@ layout: default
 <!-- disqus 公共JS代码 end -->
 {% endif %}
 
+<!-- 👇 新增：复制按钮的JS逻辑（放在anchorjs之前） -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const codeBlocks = document.querySelectorAll('pre');
+  codeBlocks.forEach(block => {
+    // 创建复制按钮
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-code-btn';
+    copyBtn.innerText = '复制代码';
+    // 创建复制成功提示
+    const successTip = document.createElement('div');
+    successTip.className = 'copy-success-tip';
+    successTip.innerText = '复制成功 ✔';
+    // 把按钮和提示添加到代码块
+    block.appendChild(copyBtn);
+    block.appendChild(successTip);
+
+    // 点击复制逻辑
+    copyBtn.addEventListener('click', function () {
+      const codeElement = block.querySelector('code');
+      const codeText = codeElement ? codeElement.textContent : block.textContent;
+      // 优先用剪贴板API，兼容旧浏览器用fallback
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(codeText)
+          .then(() => showSuccessTip(successTip))
+          .catch(() => fallbackCopy(codeText, successTip));
+      } else {
+        fallbackCopy(codeText, successTip);
+      }
+    });
+  });
+
+  // 兼容旧浏览器的复制方法
+  function fallbackCopy(text, tip) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.top = '-9999px';
+    textArea.style.left = '-9999px';
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+      const isSuccess = document.execCommand('copy');
+      isSuccess ? showSuccessTip(tip) : alert('复制失败，请手动复制');
+    } catch (err) {
+      alert('复制失败：' + err);
+    }
+    document.body.removeChild(textArea);
+  }
+
+  // 显示复制成功提示
+  function showSuccessTip(tip) {
+    tip.style.display = 'block';
+    setTimeout(() => {
+      tip.style.display = 'none';
+    }, 2000);
+  }
+});
+</script>
 
 {% if site.anchorjs %}
 <!-- async load function -->
