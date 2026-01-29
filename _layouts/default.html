@@ -1,72 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 {% include head.html %}
-
-<!-- 【代码块复制功能-开始】添加一键复制样式 -->
-<style>
-/* 给代码块容器加相对定位，让复制按钮绝对定位在内部 */
-pre {
-  position: relative;
-  margin: 1em 0;
-  padding-top: 2.5em !important; /* 给按钮留顶部空间，避免遮挡代码 */
-}
-/* 复制按钮样式 - 匹配博客绿色主色调 */
-pre .copy-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 0.3em 0.8em;
-  font-size: 0.8em;
-  background: #42b983;
-  color: #fff;
-  border: none;
-  border-radius: 0 0 0 4px;
-  cursor: pointer;
-  transition: background 0.2s;
-  z-index: 10; /* 保证按钮在最上层，不被遮挡 */
-}
-/* 按钮hover变色 */
-pre .copy-btn:hover {
-  background: #359469;
-}
-/* 复制成功提示样式 */
-pre .copy-tip {
-  position: absolute;
-  top: 0;
-  right: 60px;
-  padding: 0.3em 0.8em;
-  font-size: 0.8em;
-  background: #666;
-  color: #fff;
-  border-radius: 0 0 0 4px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s;
-  z-index: 10;
-}
-/* 提示显示样式 */
-pre .copy-tip.show {
-  opacity: 1;
-}
-</style>
-<!-- 【代码块复制功能-结束】样式结束 -->
-
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="">
-
     {% include nav.html %}
     {% include search.html %}
-
     {{ content }}
-
     {% include footer.html %}
-
-
 <!-- Image to hack wechat -->
 <!--<img src="/img/icon_wechat.png" width="0" height="0" />-->
 <!-- Migrate from head to bottom, no longer block render and still work -->
-
 <!-- Modified by iFeng to add the Return to Top function. 202403061305 start -->
 <div id="back-to-top">
     <a href="#" data-toggle="tooltip" data-placement="top" title="top">
@@ -94,61 +37,5 @@ $(document).ready(function(){
 });	
 </script>
 <!-- Modified by iFeng to add the Return to Top function. 202403061305 end-->
-
-<!-- 【代码块复制功能-开始】添加一键复制JS功能（原生JS，兼容jQuery，无依赖） -->
-<!-- 【代码块复制功能-修正版】解决多按钮+复制行号问题 -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // 仅选择「实际代码块的pre」（过滤嵌套/非代码pre，解决多按钮问题）
-  const preBlocks = Array.from(document.querySelectorAll('pre')).filter(pre => {
-    // 判断pre内是否包含代码块（通过code是否有language类）
-    return pre.querySelector('code[class*="language-"]') !== null;
-  });
-
-  preBlocks.forEach(pre => {
-    // 避免重复添加按钮
-    if (pre.querySelector('.copy-btn')) return;
-
-    // 创建右上角复制按钮（仅一个）
-    const copyBtn = document.createElement('button');
-    copyBtn.className = 'copy-btn';
-    copyBtn.innerText = '复制';
-
-    // 创建复制提示
-    const copyTip = document.createElement('span');
-    copyTip.className = 'copy-tip';
-    copyTip.innerText = '复制成功';
-
-    pre.appendChild(copyBtn);
-    pre.appendChild(copyTip);
-
-    // 点击复制逻辑（过滤行号）
-    copyBtn.addEventListener('click', function() {
-      const code = pre.querySelector('code');
-      if (!code) return;
-
-      // 核心：去掉代码中的行号（正则替换每行开头的「数字+空格」，解决行号复制问题）
-      let codeText = code.innerText;
-      codeText = codeText.replace(/^\d+\s+/gm, ''); // 全局替换「行号+空格」
-
-      // 复制到剪贴板
-      navigator.clipboard.writeText(codeText).then(() => {
-        copyTip.classList.add('show');
-        setTimeout(() => copyTip.classList.remove('show'), 2000);
-      }).catch(err => {
-        copyTip.innerText = '复制失败';
-        copyTip.classList.add('show');
-        setTimeout(() => {
-          copyTip.classList.remove('show');
-          copyTip.innerText = '复制成功';
-        }, 2000);
-        console.error('复制失败:', err);
-      });
-    });
-  });
-});
-</script>
-<!-- 【代码块复制功能-结束】JS功能结束 -->
-
 </body>
 </html>
