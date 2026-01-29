@@ -3,6 +3,55 @@
 
 {% include head.html %}
 
+<!-- 【代码块复制功能-开始】添加一键复制样式 -->
+<style>
+/* 给代码块容器加相对定位，让复制按钮绝对定位在内部 */
+pre {
+  position: relative;
+  margin: 1em 0;
+  padding-top: 2.5em !important; /* 给按钮留顶部空间，避免遮挡代码 */
+}
+/* 复制按钮样式 - 匹配博客绿色主色调 */
+pre .copy-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.3em 0.8em;
+  font-size: 0.8em;
+  background: #42b983;
+  color: #fff;
+  border: none;
+  border-radius: 0 0 0 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+  z-index: 10; /* 保证按钮在最上层，不被遮挡 */
+}
+/* 按钮hover变色 */
+pre .copy-btn:hover {
+  background: #359469;
+}
+/* 复制成功提示样式 */
+pre .copy-tip {
+  position: absolute;
+  top: 0;
+  right: 60px;
+  padding: 0.3em 0.8em;
+  font-size: 0.8em;
+  background: #666;
+  color: #fff;
+  border-radius: 0 0 0 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 10;
+}
+/* 提示显示样式 */
+pre .copy-tip.show {
+  opacity: 1;
+}
+</style>
+<!-- 【代码块复制功能-结束】样式结束 -->
+
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="">
 
@@ -45,6 +94,63 @@ $(document).ready(function(){
 });	
 </script>
 <!-- Modified by iFeng to add the Return to Top function. 202403061305 end-->
+
+<!-- 【代码块复制功能-开始】添加一键复制JS功能（原生JS，兼容jQuery，无依赖） -->
+<script>
+// 等待页面DOM加载完成后执行
+document.addEventListener('DOMContentLoaded', function() {
+  // 遍历所有pre代码块容器（Markdown```渲染后的根标签）
+  const preBlocks = document.querySelectorAll('pre');
+  preBlocks.forEach(pre => {
+    // 避免重复添加按钮（页面刷新/动态加载兼容）
+    if (pre.querySelector('.copy-btn')) return;
+
+    // 创建复制按钮
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-btn';
+    copyBtn.innerText = '复制';
+
+    // 创建复制成功提示
+    const copyTip = document.createElement('span');
+    copyTip.className = 'copy-tip';
+    copyTip.innerText = '复制成功';
+
+    // 把按钮和提示添加到pre代码块中
+    pre.appendChild(copyBtn);
+    pre.appendChild(copyTip);
+
+    // 绑定按钮点击事件
+    copyBtn.addEventListener('click', function() {
+      // 获取pre内的code标签（所有代码都在code标签里，保留原格式）
+      const code = pre.querySelector('code');
+      if (!code) return;
+
+      // 获取纯文本代码（保留换行、空格等原格式）
+      const codeText = code.innerText;
+
+      // 原生剪贴板API复制，兼容所有现代浏览器
+      navigator.clipboard.writeText(codeText).then(() => {
+        // 显示复制成功提示
+        copyTip.classList.add('show');
+        // 2秒后自动隐藏提示
+        setTimeout(() => {
+          copyTip.classList.remove('show');
+        }, 2000);
+      }).catch(err => {
+        // 复制失败的友好提示
+        copyTip.innerText = '复制失败';
+        copyTip.classList.add('show');
+        setTimeout(() => {
+          copyTip.classList.remove('show');
+          copyTip.innerText = '复制成功'; // 恢复原提示文字
+        }, 2000);
+        console.error('代码复制失败：', err);
+      });
+    });
+  });
+});
+</script>
+<!-- 【代码块复制功能-结束】JS功能结束 -->
 
 </body>
 </html>
