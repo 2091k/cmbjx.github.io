@@ -96,55 +96,53 @@ $(document).ready(function(){
 <!-- Modified by iFeng to add the Return to Top function. 202403061305 end-->
 
 <!-- 【代码块复制功能-开始】添加一键复制JS功能（原生JS，兼容jQuery，无依赖） -->
+<!-- 【代码块复制功能-修正版】解决多按钮+复制行号问题 -->
 <script>
-// 等待页面DOM加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
-  // 遍历所有pre代码块容器（Markdown```渲染后的根标签）
-  const preBlocks = document.querySelectorAll('pre');
+  // 仅选择「实际代码块的pre」（过滤嵌套/非代码pre，解决多按钮问题）
+  const preBlocks = Array.from(document.querySelectorAll('pre')).filter(pre => {
+    // 判断pre内是否包含代码块（通过code是否有language类）
+    return pre.querySelector('code[class*="language-"]') !== null;
+  });
+
   preBlocks.forEach(pre => {
-    // 避免重复添加按钮（页面刷新/动态加载兼容）
+    // 避免重复添加按钮
     if (pre.querySelector('.copy-btn')) return;
 
-    // 创建复制按钮
+    // 创建右上角复制按钮（仅一个）
     const copyBtn = document.createElement('button');
     copyBtn.className = 'copy-btn';
     copyBtn.innerText = '复制';
 
-    // 创建复制成功提示
+    // 创建复制提示
     const copyTip = document.createElement('span');
     copyTip.className = 'copy-tip';
     copyTip.innerText = '复制成功';
 
-    // 把按钮和提示添加到pre代码块中
     pre.appendChild(copyBtn);
     pre.appendChild(copyTip);
 
-    // 绑定按钮点击事件
+    // 点击复制逻辑（过滤行号）
     copyBtn.addEventListener('click', function() {
-      // 获取pre内的code标签（所有代码都在code标签里，保留原格式）
       const code = pre.querySelector('code');
       if (!code) return;
 
-      // 获取纯文本代码（保留换行、空格等原格式）
-      const codeText = code.innerText;
+      // 核心：去掉代码中的行号（正则替换每行开头的「数字+空格」，解决行号复制问题）
+      let codeText = code.innerText;
+      codeText = codeText.replace(/^\d+\s+/gm, ''); // 全局替换「行号+空格」
 
-      // 原生剪贴板API复制，兼容所有现代浏览器
+      // 复制到剪贴板
       navigator.clipboard.writeText(codeText).then(() => {
-        // 显示复制成功提示
         copyTip.classList.add('show');
-        // 2秒后自动隐藏提示
-        setTimeout(() => {
-          copyTip.classList.remove('show');
-        }, 2000);
+        setTimeout(() => copyTip.classList.remove('show'), 2000);
       }).catch(err => {
-        // 复制失败的友好提示
         copyTip.innerText = '复制失败';
         copyTip.classList.add('show');
         setTimeout(() => {
           copyTip.classList.remove('show');
-          copyTip.innerText = '复制成功'; // 恢复原提示文字
+          copyTip.innerText = '复制成功';
         }, 2000);
-        console.error('代码复制失败：', err);
+        console.error('复制失败:', err);
       });
     });
   });
