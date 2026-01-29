@@ -11,7 +11,7 @@ tags:
 ---
 #### 使用VB代码直接实现
 
-```shell
+```vb
 Dim logPath, fso, logLine, fieldName, fieldValue
 Dim logFields, fieldNames ' 新增：固定字段名数组（保证Excel列顺序不变）
 Dim xlApp, xlBook, xlSheet, lastRow, iCol ' Excel操作相关变量
@@ -101,4 +101,5 @@ End If
 #### 注意⚠️：具名数据源改成对应名称
 
 脚本事件：OnNewRecord 读取数据库记录之后在打印时执行
+
 
