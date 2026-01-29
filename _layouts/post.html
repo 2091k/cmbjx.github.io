@@ -5,47 +5,66 @@ layout: default
 <!-- 添加这行代码：禁止发送 Referer，解决图片防盗链 -->
 <meta name="referrer" content="no-referrer">
 
-<!-- 👇 新增：复制按钮样式（仅新增，不修改原有样式） -->
+<!-- 👇 核心：隐藏主题自带的所有复制按钮 + 自定义按钮样式 -->
 <style>
-/* 代码块容器：给按钮提供定位基准 */
-pre {
-  position: relative; 
-  overflow: visible !important; /* 确保按钮不被遮挡 */
+/* ========== 第一步：彻底隐藏主题自带的复制按钮 ========== */
+/* 匹配主题所有可能的复制按钮类名/标签（根据常见主题写法覆盖） */
+pre [class*="copy-btn"], 
+pre [class*="code-copy"], 
+pre [id*="copy"],
+pre > button:not(.custom-copy-btn), /* 非我们的按钮全部隐藏 */
+pre > a[class*="copy"],
+pre > div[class*="copy"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
 }
 
-/* 复制按钮：固定在右上角，样式简洁 */
+/* ========== 第二步：自定义按钮样式（浮在右上角，不随滚动） ========== */
+/* 代码块容器：确保按钮定位基准，滚动时按钮固定在代码块内 */
+pre {
+  position: relative; 
+  overflow: auto !important; /* 代码块滚动时，按钮仍在右上角 */
+  margin: 1.5rem 0;
+}
+
+/* 自定义复制按钮：浮在代码块右上角，不随滚动条移动 */
 .custom-copy-btn {
-  position: absolute;
+  position: sticky !important; /* 关键：粘性定位，固定在代码块右上角 */
   top: 8px;
   right: 8px;
   padding: 4px 8px;
-  background-color: #444;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  font-size: 12px;
-  cursor: pointer;
-  z-index: 100; /* 确保在最上层 */
-  opacity: 0.9;
+  background-color: #444 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 3px !important;
+  font-size: 12px !important;
+  cursor: pointer !important;
+  z-index: 9999 !important; /* 最高层级，不被遮挡 */
+  opacity: 0.9 !important;
+  /* 强制覆盖主题样式，避免被继承 */
+  float: none !important;
+  clear: none !important;
+  box-shadow: none !important;
 }
 
 .custom-copy-btn:hover {
-  opacity: 1;
-  background-color: #2788e8;
+  opacity: 1 !important;
+  background-color: #2788e8 !important;
 }
 
 /* 复制成功提示：和按钮同位置 */
 .custom-copy-tip {
-  position: absolute;
+  position: sticky !important;
   top: 8px;
   right: 8px;
   padding: 4px 8px;
-  background-color: #28a745;
-  color: #fff;
-  border-radius: 3px;
-  font-size: 12px;
-  display: none;
-  z-index: 100;
+  background-color: #28a745 !important;
+  color: #fff !important;
+  border-radius: 3px !important;
+  font-size: 12px !important;
+  display: none !important;
+  z-index: 9999 !important;
 }
 </style>
 
@@ -202,16 +221,20 @@ pre {
 <!-- disqus 公共JS代码 end -->
 {% endif %}
 
-<!-- 👇 新增：复制按钮核心逻辑（仅新增，不修改原有JS） -->
+<!-- 👇 复制按钮核心逻辑：只创建一个按钮，删除多余按钮 -->
 <script>
 // 页面加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
-    // 选中所有代码块
+    // ========== 第一步：删除主题自带的所有复制按钮 ==========
+    const themeCopyBtns = document.querySelectorAll(
+        'pre [class*="copy-btn"], pre [class*="code-copy"], pre [id*="copy"], pre > button:not(.custom-copy-btn), pre > a[class*="copy"], pre > div[class*="copy"]'
+    );
+    themeCopyBtns.forEach(btn => btn.remove());
+
+    // ========== 第二步：给每个代码块添加唯一的自定义按钮 ==========
     const codeBlocks = document.querySelectorAll('pre');
-    
-    // 遍历每个代码块，添加复制按钮
     codeBlocks.forEach(block => {
-        // 跳过已有自定义复制按钮的代码块（避免重复）
+        // 跳过已有自定义按钮的代码块（避免重复）
         if (block.querySelector('.custom-copy-btn')) return;
 
         // 1. 创建复制按钮
@@ -224,42 +247,32 @@ document.addEventListener('DOMContentLoaded', function() {
         copyTip.className = 'custom-copy-tip';
         copyTip.innerText = '复制成功';
 
-        // 3. 添加到代码块
+        // 3. 添加到代码块（只加一次）
         block.appendChild(copyBtn);
         block.appendChild(copyTip);
 
-        // 4. 绑定复制事件
+        // 4. 绑定复制事件（只复制纯代码）
         copyBtn.addEventListener('click', function() {
-            // 获取纯代码内容（核心：过滤行号和无关文本）
             let codeText = '';
             const codeEl = block.querySelector('code');
             
             if (codeEl) {
-                // 优先取code标签内的文本
+                // 优先取code标签内的纯文本
                 codeText = codeEl.textContent || codeEl.innerText;
                 // 移除行号（匹配 1 2 3... 开头的行）
-                codeText = codeText.replace(/^\s*\d+\s+/gm, '');
-                // 移除多余空格和换行
-                codeText = codeText.trim();
+                codeText = codeText.replace(/^\s*\d+\s+/gm, '').trim();
             } else {
-                // 备用：取pre内的文本
                 codeText = block.textContent.replace(/^\s*\d+\s+/gm, '').trim();
             }
 
             // 复制到剪贴板
             if (navigator.clipboard) {
-                // 现代浏览器
                 navigator.clipboard.writeText(codeText)
                     .then(() => {
-                        // 显示成功提示
                         copyTip.style.display = 'block';
-                        setTimeout(() => {
-                            copyTip.style.display = 'none';
-                        }, 2000);
+                        setTimeout(() => copyTip.style.display = 'none', 2000);
                     })
-                    .catch(() => {
-                        alert('复制失败，请手动复制');
-                    });
+                    .catch(() => alert('复制失败，请手动复制'));
             } else {
                 // 兼容旧浏览器
                 const textArea = document.createElement('textarea');
@@ -271,9 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 try {
                     document.execCommand('copy');
                     copyTip.style.display = 'block';
-                    setTimeout(() => {
-                        copyTip.style.display = 'none';
-                    }, 2000);
+                    setTimeout(() => copyTip.style.display = 'none', 2000);
                 } catch (err) {
                     alert('复制失败，请手动复制');
                 }
@@ -281,6 +292,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // ========== 第三步：再次检查，确保无漏网的多余按钮 ==========
+    setTimeout(() => {
+        document.querySelectorAll('pre > button:not(.custom-copy-btn)').forEach(btn => btn.remove());
+    }, 1000);
 });
 </script>
 
