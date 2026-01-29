@@ -4,7 +4,7 @@ layout: default
 
 <!-- 添加这行代码：禁止发送 Referer，解决图片防盗链 -->
 <meta name="referrer" content="no-referrer">
-
+<link rel="stylesheet" href="{{ site.baseurl }}/css/copy-code.css">
 <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
 <!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
@@ -77,6 +77,8 @@ layout: default
 
 			}) 
 		</script>
+		<!-- 在 Valine 脚本后、anchorjs 前添加 -->
+        <script src="{{ site.baseurl }}/js/copy-code.js"></script>
 		{% endif %}
 
                 {% if site.netease_comment %}
