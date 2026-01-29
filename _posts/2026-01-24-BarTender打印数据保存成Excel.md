@@ -9,7 +9,7 @@ tags:
 - BarTender
 - Excel
 ---
-#### powershell命令调用[exe](https://wwbda.lanzouv.com/iTJZ23gwua5c)文件进行转换
+#### powershell命令调用[exe](https://wwbda.lanzouv.com/idxxd3h9a2da)文件进行转换
 
 ```shell
 powershell -Command "Start-Process -FilePath 'C:\BarTender\Log\txt_to_excel.exe' -WorkingDirectory 'C:\BarTender\Log' -WindowStyle Hidden -Verb RunAs""
