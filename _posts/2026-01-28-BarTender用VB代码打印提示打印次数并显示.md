@@ -5,6 +5,7 @@ subtitle: ""
 author: "每天要好心情哦，我的朋友"
 header-img: "img/tu/home-blue.jpg"
 header-mask: 0.4
+category: 技术
 tags:
 - BarTender
 - VB代码
