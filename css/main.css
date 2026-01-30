@@ -33,18 +33,18 @@
   opacity: 1;
 }
 
-/* 手机端适配：按钮不遮挡代码 */
+/* 手机端适配：仅保留字号/内边距优化，恢复右上角定位（核心修改） */
 @media screen and (max-width: 768px) {
   .code-copy-btn {
-    top: auto;
-    bottom: 10px;
+    /* 删掉bottom:10px、top:auto，保留top:10px（继承基础样式，也可显式写） */
+    top: 10px;
     right: 10px;
     font-size: 11px;
     padding: 3px 6px;
   }
   .code-copy-tip {
-    top: auto;
-    bottom: 10px;
+    /* 同步删掉bottom:10px、top:auto，恢复顶部定位 */
+    top: 10px;
     right: 50px;
     font-size: 11px;
   }
