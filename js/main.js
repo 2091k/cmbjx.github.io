@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // 创建复制按钮和提示框（样式不变）
     const copyBtn = document.createElement('button');
     copyBtn.className = 'code-copy-btn';
-    copyBtn.innerText = '复制';
-    copyBtn.title = '一键复制纯代码（自动过滤行号）';
+    copyBtn.innerText = 'copy';
+    copyBtn.title = '一键复制代码（自动过滤行号）';
     block.appendChild(copyBtn);
 
     const copyTip = document.createElement('span');
