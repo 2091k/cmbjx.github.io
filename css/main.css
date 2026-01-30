@@ -1,0 +1,50 @@
+/* 代码块右上角复制按钮核心样式 - 适配Jekyll默认代码块 */
+.code-copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 3px 8px;
+  border: none;
+  border-radius: 3px;
+  background: #666;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  z-index: 10;
+  outline: none;
+}
+.code-copy-btn:hover {
+  background: #2eaadc;
+}
+.code-copy-btn:active {
+  transform: scale(0.97);
+}
+
+/* 复制成功/失败提示框样式 */
+.code-copy-tip {
+  position: absolute;
+  top: 8px;
+  right: 45px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  font-size: 12px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.code-copy-tip.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 强制代码块容器为相对定位（按钮定位的核心），适配Jekyll+rouge默认结构 */
+div.highlight {
+  position: relative !important;
+  margin: 1.5em 0 !important;
+}
+div.highlight pre {
+  padding: 1em !important;
+  overflow-x: auto !important;
+}
