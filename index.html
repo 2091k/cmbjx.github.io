@@ -14,6 +14,8 @@ description: "「世界那么大 我想去看看 ...」"
             {{ post.subtitle }}
         </h3>
         {% endif %}
+        {% comment %} 注释掉文章内容预览 - 主页不显示内容，恢复则删除此注释块 {% endcomment %}
+        {% comment %}
         <div class="post-content-preview">
             {% if post.lang == 'en' %}
                 {{ post.content | strip_html | truncate:300 }}
@@ -21,6 +23,7 @@ description: "「世界那么大 我想去看看 ...」"
                 {{ post.content | strip_html | truncate:200 }}
             {% endif %}
         </div>
+        {% endcomment %}
     </a>
     <p class="post-meta">
         Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}
