@@ -1,50 +1,59 @@
-// 代码块复制功能 - 修正版：仅复制纯代码，过滤行号/复制文字/冗余空白
+// 代码块复制功能 - 终极版：兼容rouge所有行号结构，精准获取纯代码（过滤行号/复制文字/所有冗余）
 document.addEventListener('DOMContentLoaded', function() {
-  // 匹配结构：先取pre，再在内部精准找code标签（纯代码容器）
-  const codeBlocks = document.querySelectorAll('div.highlight pre');
+  // 匹配所有代码块外层容器
+  const codeBlocks = document.querySelectorAll('div.highlight');
   
-  codeBlocks.forEach(preBlock => {
+  codeBlocks.forEach(highlightBlock => {
     // 防止重复添加按钮
-    if (preBlock.dataset.copyBtn) return;
-    preBlock.dataset.copyBtn = 'true';
+    if (highlightBlock.dataset.copyBtn) return;
+    highlightBlock.dataset.copyBtn = 'true';
+    // 强制容器相对定位，保证按钮定位
+    highlightBlock.style.position = 'relative';
 
-    // 1. 创建复制按钮（样式不变，仅位置保留）
+    // 1. 创建复制按钮（样式不变）
     const copyBtn = document.createElement('button');
     copyBtn.className = 'code-copy-btn';
     copyBtn.innerText = '复制';
     copyBtn.title = '一键复制纯代码（自动过滤行号）';
-    preBlock.appendChild(copyBtn);
+    highlightBlock.appendChild(copyBtn); // 按钮挂在最外层，避免被行号/代码块遮挡
 
     // 2. 创建提示框
     const copyTip = document.createElement('span');
     copyTip.className = 'code-copy-tip';
-    preBlock.appendChild(copyTip);
+    highlightBlock.appendChild(copyTip);
 
-    // 3. 复制核心逻辑【重点修正：仅取纯代码，过滤所有冗余】
+    // 3. 复制核心逻辑【按节点精准获取纯代码，兼容所有rouge行号结构】
     copyBtn.addEventListener('click', async function() {
       try {
-        // 关键1：精准获取code标签（纯代码内容唯一容器，行号/按钮都不在此标签内）
-        const codeTag = preBlock.querySelector('code');
-        if (!codeTag) throw new Error('未找到纯代码内容');
+        let pureCode = '';
+        // ********** 适配结构1：table表格布局（rouge linenos默认，最可能）**********
+        const codeTable = highlightBlock.querySelector('table .code pre');
+        if (codeTable) {
+          pureCode = codeTable.textContent.trim();
+        } 
+        // ********** 适配结构2：span行号布局 **********
+        else if (highlightBlock.querySelectorAll('.line-number, .gutter').length) {
+          const codeLines = highlightBlock.querySelectorAll('pre code, pre > span:not(.line-number):not(.gutter)');
+          codeLines.forEach(line => pureCode += line.textContent + '\n');
+          pureCode = pureCode.trim();
+        }
+        // ********** 适配常规结构（无行号/单code标签）**********
+        else {
+          const codeTag = highlightBlock.querySelector('code');
+          pureCode = codeTag ? codeTag.textContent.trim() : '';
+        }
 
-        // 关键2：获取code标签原始文本，先过滤首尾空白
-        let pureCode = codeTag.textContent.trim();
-        
-        // 关键3：正则过滤rouge生成的所有格式行号（适配1. / 1  / 01 等所有行号格式）
-        // 正则说明：匹配开头的 数字+可选的点/空格 + 空格，全局替换为空
-        pureCode = pureCode.replace(/^\d+[.\s]+\s/gm, '');
+        // 校验：未获取到代码则抛出错误
+        if (!pureCode) throw new Error('未检测到纯代码内容');
 
-        // 关键4：再次过滤首尾空白，保证复制的代码干净
-        pureCode = pureCode.trim();
-
-        // 原生剪贴板API：仅复制处理后的纯代码
+        // 仅复制处理后的纯代码
         await navigator.clipboard.writeText(pureCode);
-        copyTip.innerText = '复制成功（纯代码）';
+        copyTip.innerText = '复制成功！';
         copyTip.classList.add('show');
       } catch (err) {
-        copyTip.innerText = '复制失败：' + err.message;
+        copyTip.innerText = '复制失败';
         copyTip.classList.add('show');
-        console.log('代码复制失败：', err);
+        console.log('复制失败原因：', err);
       } finally {
         // 2秒后隐藏提示
         setTimeout(() => copyTip.classList.remove('show'), 2000);
