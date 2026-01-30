@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const copyBtn = document.createElement('button');
     copyBtn.className = 'code-copy-btn';
     copyBtn.innerText = 'copy';
-    copyBtn.title = '一键复制代码（自动过滤行号）';
+    copyBtn.title = '一键复制代码';
     block.appendChild(copyBtn);
 
     const copyTip = document.createElement('span');
