@@ -27,7 +27,7 @@ telegram_username: cmbjx2
 # from 2016, 'pygments' is unsupported on GitHub Pages. Use 'rouge' for highlighting instead.
 highlighter: rouge
 permalink: pretty
-paginate: 10
+paginate: 30
 exclude:
   [
     "less",
