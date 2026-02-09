@@ -19,7 +19,15 @@ Dim xlApp, xlBook, xlSheet, lastRow, iCol ' Excel操作相关变量
 On Error Resume Next ' 保留异常捕获，处理文件/Excel操作错误
 
 ' ====================== 【唯一修改区】======================
-logPath = "C:\print_log.xlsx" ' 仅改后缀为xlsx，路径建议无中文/空格
+' 创建 Shell 对象，用于获取系统特殊文件夹路径
+Set WshShell = CreateObject("WScript.Shell")
+' 自动获取当前用户的桌面路径（适配不同系统/用户）
+desktopPath = WshShell.SpecialFolders("Desktop")
+' 拼接桌面路径和文件名，生成最终的日志文件路径
+logPath = desktopPath & "\print_log.xlsx"
+
+' 可选：输出路径验证（运行时可看到实际路径）
+WScript.Echo "日志文件路径：" & logPath
 ' 配置日志字段：格式【"字段名1"】= 字段取值1 ，新增/删除/修改直接加行/删行即可
 ' 【重要】fieldNames数组手动同步字段名（保证Excel列顺序固定，必配）
 fieldNames = Array("员工姓名", "员工工号", "所属部门", "打印时间")
@@ -102,5 +110,6 @@ End If
 #### 注意⚠️：具名数据源改成对应名称
 
 脚本事件：OnNewRecord 读取数据库记录之后在打印时执行
+
 
 
