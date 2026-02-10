@@ -10,9 +10,34 @@ tags:
 - BarTender
 - Excel
 ---
+
 #### 使用VB代码直接实现
 
-```vb
+<!-- 密码保护代码块 - 完整版 -->
+<div id="bartender-code-container" style="margin: 20px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <!-- 密码输入区域 -->
+  <div id="bartender-password-prompt" style="padding: 15px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; margin-bottom: 10px;">
+    <p style="margin: 0 0 10px 0; color: #333; font-size: 14px;">请输入密码查看代码：</p>
+    <input 
+      type="password" 
+      id="bartender-code-pwd" 
+      placeholder="在此输入密码"
+      style="padding: 8px 12px; width: 250px; border: 1px solid #ddd; border-radius: 4px; margin-right: 8px; font-size: 14px;"
+      onkeydown="if(event.key === 'Enter') checkBartenderPwd()"
+    >
+    <button 
+      onclick="checkBartenderPwd()"
+      style="padding: 8px 16px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;"
+    >
+      验证并查看代码
+    </button>
+    <p style="margin: 8px 0 0 0; color: #6c757d; font-size: 12px;">提示：输入密码后按回车或点击按钮均可验证</p>
+  </div>
+  
+  <!-- 受保护的VB代码块（默认隐藏） -->
+  <div id="bartender-secret-code" style="display: none;">
+    <pre style="margin: 0; padding: 16px; background: #f5f5f5; border-radius: 6px; overflow-x: auto;">
+      <code class="language-vb" style="color: #333; font-family: Consolas, Monaco, 'Courier New', monospace; font-size: 14px; line-height: 1.5;">
 Dim logPath, fso, logLine, fieldName, fieldValue
 Dim logFields, fieldNames
 Dim xlApp, xlBook, xlSheet, lastRow, iCol
@@ -83,12 +108,46 @@ If Err.Number <> 0 Then
     MsgBox "Excel日志写入失败：" & Err.Description & vbCrLf & "请检查：1.路径权限/文件是否被占用 2.是否安装Excel 3.路径无中文/空格", vbCritical, "错误"
     Err.Clear
 End If
-```
+      </code>
+    </pre>
+  </div>
+</div>
+
+<script>
+// 核心配置：修改此处的密码为你想要的自定义密码
+const BARTENDER_CORRECT_PWD = "236520";
+
+// 密码验证核心函数
+function checkBartenderPwd() {
+  const pwdInput = document.getElementById("bartender-code-pwd");
+  const inputPwd = pwdInput.value.trim();
+  
+  // 空密码验证
+  if (inputPwd === "") {
+    alert("请输入密码后再验证！");
+    pwdInput.focus();
+    return;
+  }
+  
+  // 正确密码验证
+  if (inputPwd === BARTENDER_CORRECT_PWD) {
+    document.getElementById("bartender-secret-code").style.display = "block";
+    document.getElementById("bartender-password-prompt").style.display = "none";
+    alert("✅ 密码正确！已显示完整的代码");
+  } else {
+    // 错误密码处理
+    alert("❌ 密码错误！请重新输入");
+    pwdInput.value = "";
+    pwdInput.focus();
+  }
+}
+
+// 页面加载完成后自动聚焦输入框（优化体验）
+window.onload = function() {
+  document.getElementById("bartender-code-pwd").focus();
+};
+</script>
 
 #### 注意⚠️：具名数据源改成对应名称
 
 脚本事件：OnNewRecord 读取数据库记录之后在打印时执行
-
-
-
-
