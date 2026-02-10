@@ -13,141 +13,88 @@ tags:
 
 #### 使用VB代码直接实现
 
-<!-- 密码保护代码块 - 完整版 -->
-<div id="bartender-code-container" style="margin: 20px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-  <!-- 密码输入区域 -->
-  <div id="bartender-password-prompt" style="padding: 15px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; margin-bottom: 10px;">
+<!-- 哈希版解密模块（源码无明文密码） -->
+<div id="hash-crypto-container" style="margin: 20px 0; font-family: 'Microsoft Yahei', Roboto, sans-serif;">
+  <div id="hash-prompt" style="padding: 15px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; margin-bottom: 10px;">
     <p style="margin: 0 0 10px 0; color: #333; font-size: 14px;">请输入密码查看代码：</p>
     <input 
       type="password" 
-      id="bartender-code-pwd" 
-      placeholder="在此输入密码"
+      id="hash-pwd" 
+      placeholder="输入查看密码"
       style="padding: 8px 12px; width: 250px; border: 1px solid #ddd; border-radius: 4px; margin-right: 8px; font-size: 14px;"
-      onkeydown="if(event.key === 'Enter') checkBartenderPwd()"
+      onkeydown="if(event.key === 'Enter') decryptByHash()"
     >
     <button 
-      onclick="checkBartenderPwd()"
-      style="padding: 8px 16px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;"
+      onclick="decryptByHash()"
+      style="padding: 8px 16px; background: #286090; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;"
     >
-      验证并查看代码
+      解密查看
     </button>
-    <p style="margin: 8px 0 0 0; color: #6c757d; font-size: 12px;">提示：输入密码后按回车或点击按钮均可验证</p>
   </div>
   
-  <!-- 受保护的VB代码块（默认隐藏） -->
-  <div id="bartender-secret-code" style="display: none;">
+  <div id="hash-result" style="display: none;">
     <pre style="margin: 0; padding: 16px; background: #f5f5f5; border-radius: 6px; overflow-x: auto;">
-      <code class="language-vb" style="color: #333; font-family: Consolas, Monaco, 'Courier New', monospace; font-size: 14px; line-height: 1.5;">
-Dim logPath, fso, logLine, fieldName, fieldValue
-Dim logFields, fieldNames
-Dim xlApp, xlBook, xlSheet, lastRow, iCol
-On Error Resume Next
-
-Set WshShell = CreateObject("WScript.Shell")
-desktopPath = WshShell.SpecialFolders("Desktop")
-logPath = desktopPath & "\print_log.xlsx"
-
-WScript.Echo "日志文件路径：" & logPath
-
-fieldNames = Array("员工姓名", "员工工号", "所属部门", "打印时间")
-Set logFields = CreateObject("Scripting.Dictionary")
-logFields("员工姓名") = Format.NamedSubStrings("员工姓名").Value
-logFields("员工工号") = Format.NamedSubStrings("员工工号").Value
-logFields("所属部门") = Format.NamedSubStrings("所属部门").Value
-logFields("打印时间") = FormatDateTime(Now(), 2) & " " & FormatDateTime(Now(), 3)
-
-If Trim(logPath) = "" Or logFields.Count = 0 Or UBound(fieldNames) < 0 Then
-    MsgBox "日志路径未配置、无日志字段或字段名数组未同步！", vbCritical, "错误"
-    Exit Sub
-End If
-
-Set fso = CreateObject("Scripting.FileSystemObject")
-
-Set xlApp = CreateObject("Excel.Application")
-xlApp.Visible = False
-xlApp.DisplayAlerts = False
-
-If fso.FileExists(logPath) Then
-    Set xlBook = xlApp.Workbooks.Open(logPath)
-    Set xlSheet = xlBook.Sheets(1)
-    lastRow = xlSheet.UsedRange.Rows.Count + 1
-Else
-    Set xlBook = xlApp.Workbooks.Add
-    Set xlSheet = xlBook.Sheets(1)
-    lastRow = 1
-    For iCol = 0 To UBound(fieldNames)
-        xlSheet.Cells(lastRow, iCol + 1).Value = fieldNames(iCol)
-        xlSheet.Cells(lastRow, iCol + 1).Font.Bold = True
-    Next
-    lastRow = lastRow + 1
-End If
-
-For iCol = 0 To UBound(fieldNames)
-    fieldName = fieldNames(iCol)
-    fieldValue = Trim(logFields(fieldName))
-    xlSheet.Cells(lastRow, iCol + 1).Value = fieldValue
-Next
-
-xlSheet.UsedRange.Columns.AutoFit
-
-If fso.FileExists(logPath) Then
-    xlBook.Save
-Else
-    xlBook.SaveAs logPath, 51
-End If
-xlBook.Close
-xlApp.Quit
-
-Set xlSheet = Nothing
-Set xlBook = Nothing
-Set xlApp = Nothing
-Set fso = Nothing
-Set logFields = Nothing
-
-If Err.Number <> 0 Then
-    MsgBox "Excel日志写入失败：" & Err.Description & vbCrLf & "请检查：1.路径权限/文件是否被占用 2.是否安装Excel 3.路径无中文/空格", vbCritical, "错误"
-    Err.Clear
-End If
-      </code>
+      <code class="language-vb" id="hash-decrypted-text" style="color: #333; font-family: Consolas, monospace; font-size: 14px; line-height: 1.5;"></code>
     </pre>
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/crypto-js@4.2.0/crypto-js.min.js"></script>
 <script>
-// 核心配置：修改此处的密码为你想要的自定义密码
-const BARTENDER_CORRECT_PWD = "236520";
+// ===================== 配置（仅存哈希，无明文密码） =====================
+const PWD_HASH = "bb6cfda395a43aa736885f4b191cf8cba6f308939e1155ba736d8c8f43e78673"; // 如：f8095880e8937d7c968f5b81e0903be9f30c266f2f6f28b8b8b8b8b8b8b8b8b8";
+const AES_KEY = CryptoJS.enc.Utf8.parse("1234567890123456");
+const AES_IV = CryptoJS.enc.Utf8.parse("abcdefghijklmnop");
+const ENCRYPTED_TEXT = "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";
 
-// 密码验证核心函数
-function checkBartenderPwd() {
-  const pwdInput = document.getElementById("bartender-code-pwd");
+// ===================== 哈希验证+解密 =====================
+function decryptByHash() {
+  const pwdInput = document.getElementById("hash-pwd");
   const inputPwd = pwdInput.value.trim();
   
-  // 空密码验证
   if (inputPwd === "") {
-    alert("请输入密码后再验证！");
+    alert("请输入密码！");
     pwdInput.focus();
     return;
   }
-  
-  // 正确密码验证
-  if (inputPwd === BARTENDER_CORRECT_PWD) {
-    document.getElementById("bartender-secret-code").style.display = "block";
-    document.getElementById("bartender-password-prompt").style.display = "none";
-    alert("✅ 密码正确！已显示完整的代码");
-  } else {
-    // 错误密码处理
-    alert("❌ 密码错误！请重新输入");
+
+  // 关键：生成输入密码的哈希，和源码中的哈希对比（无明文密码）
+  const inputHash = CryptoJS.SHA256(inputPwd).toString();
+  if (inputHash !== PWD_HASH) {
+    alert("❌ 密码错误！");
+    pwdInput.value = "";
+    pwdInput.focus();
+    return;
+  }
+
+  try {
+    // 解密逻辑（和之前一致）
+    const cipherParams = CryptoJS.lib.CipherParams.create({
+      ciphertext: CryptoJS.enc.Base64.parse(ENCRYPTED_TEXT)
+    });
+    const decryptedData = CryptoJS.AES.decrypt(cipherParams, AES_KEY, {
+      iv: AES_IV,
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7
+    });
+    const originalText = CryptoJS.enc.Utf8.stringify(decryptedData);
+
+    document.getElementById("hash-decrypted-text").textContent = originalText;
+    document.getElementById("hash-result").style.display = "block";
+    document.getElementById("hash-prompt").style.display = "none";
+    alert("✅ 密码正确！");
+    
+  } catch (error) {
+    alert("❌ 解密失败：" + error.message);
     pwdInput.value = "";
     pwdInput.focus();
   }
 }
 
-// 页面加载完成后自动聚焦输入框（优化体验）
 window.onload = function() {
-  document.getElementById("bartender-code-pwd").focus();
+  document.getElementById("hash-pwd").focus();
 };
 </script>
 
 #### 注意⚠️：具名数据源改成对应名称
-
 脚本事件：OnNewRecord 读取数据库记录之后在打印时执行
