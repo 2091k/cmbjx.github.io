@@ -19,11 +19,6 @@ tags:
 
 3.输入
 
-```SH
-irm https://massgrave.dev/get | iex
-```
-
-或者
 
 ```SH
 irm https://get.activated.win | iex
@@ -33,7 +28,16 @@ irm https://get.activated.win | iex
 
 ---
 
-#### 如果你的系统是Windows7系统也不必担心，我把代码打包好，你解压运行就行了，已加入中文版本
+#### 如果你的系统是Windows7系统也不必担心，
+
+```sh
+iex ((New-Object Net.WebClient).DownloadString('https://get.activated.win'))
+```
+
+
+
+
+我把代码打包好，你解压运行就行了，已加入中文版本
 下载地址：
 
 [office+win激活.zip](https://wwqo.lanzouo.com/ifIOf2xpz1kh)
