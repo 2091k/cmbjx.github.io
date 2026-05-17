@@ -58,6 +58,12 @@ pyinstaller --onefile --windowed 1.py
 ```py
 pyinstaller --onefile 1.py
 ```
+如需要生成文件夹形式绿色文件：
+```py
+pyinstaller -w --noconsole 1.py
+```
+
+
 4. 打包结果
 打包完成后，会在脚本所在目录生成 dist 文件夹，里面的 1.exe 就是可执行文件（可独立运行，无需依赖虚拟环境）。
 
